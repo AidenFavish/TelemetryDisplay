@@ -12,11 +12,12 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            SixPack(telemetry: $fetcher.telemetry)
+            SixPack(telemetry: fetcher.telemetry)
                 .padding(.horizontal)
         }
         .onAppear {
-            fetcher.startFetching(interval: 1.0)
+            fetcher.startFetching(interval: 0.25)
+            print(fetcher.telemetry.msg_id)
         }
         .onDisappear {
             fetcher.stopFetching()

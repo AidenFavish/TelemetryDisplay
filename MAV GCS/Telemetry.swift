@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-struct TelemetryData: Codable {
+struct TelemetryData: Codable, Equatable {
     let msg_id: Int
     
     let heading: Double
@@ -19,15 +19,15 @@ struct TelemetryData: Codable {
     
     let altitudeASL: Double
     
-    let heartbeatId: Int
+    let heartbeatID: Int
     let heartbeatHZ: Double
     
     let throttle: Double
 }
 
 class TelemetryFetcher: ObservableObject {
-    @Published var telemetry: TelemetryData = TelemetryData(msg_id: 0, heading: 0, airspeed: 0, verticalSpeed: 0, horizontalSpeed: 0, altitudeASL: 0, heartbeatId: 0, heartbeatHZ: 0, throttle: 0)
-    var beat: (() -> Void)?
+    @Published var telemetry: TelemetryData = TelemetryData(msg_id: 0, heading: 0, airspeed: 0, verticalSpeed: 0, horizontalSpeed: 0, altitudeASL: 0, heartbeatID: 0, heartbeatHZ: 0, throttle: 0)
+    
     private var timer: Timer?
 
     private let url = URL(string: "http://192.168.8.120:8000/telemetry")! // Replace with your FastAPI IP
@@ -45,11 +45,16 @@ class TelemetryFetcher: ObservableObject {
 
     private func fetchTelemetry() {
         URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data,
-                  let telemetry = try? JSONDecoder().decode(TelemetryData.self, from: data) else {
+            guard let data = data else {
+                print("data couldn't load fromt GET telem")
+                return
+            }
+            
+            guard let telemetry = try? JSONDecoder().decode(TelemetryData.self, from: data) else {
                 print("Failed to decode telemetry")
                 return
             }
+                  
             DispatchQueue.main.async {
                 self.telemetry = telemetry
             }

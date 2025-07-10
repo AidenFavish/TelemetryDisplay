@@ -32,7 +32,7 @@ struct CircleGauge: View {
                 .bold()
                 .offset(CGSize(width: 0.0, height: 30.0))
 
-            Text(String(format: "%.1f", value))
+            Text(name != "THROTTLE" ? String(format: "%.1f", value) : String(Int(round(value))))
                 .font(.largeTitle)
                 .bold()
                 .offset(CGSize(width: 0.0, height: 0.0))

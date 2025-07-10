@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SixPack: View {
     @State var isBeating: Bool = false
-    @Binding var telemetry: TelemetryData
+    let telemetry: TelemetryData
     
     @State var msg_id: Int = -1
     @State var heading: Double = -1.0
@@ -20,6 +20,7 @@ struct SixPack: View {
     @State var heartbeatId: Int = -1
     @State var heartbeatHZ: Double = -1.0
     @State var throttle: Double = -1.0
+    @State var heartbeat_id_old: Int = -1
     
     var body: some View {
         GeometryReader { geometry in
@@ -28,7 +29,7 @@ struct SixPack: View {
             if isLandscape {
                 HStack {
                     VStack {
-                        CircleGauge(colorFunction: altitudeFunc, minVal: 0.0, maxVal: 400.0, unit: "FT", name: "ALTITUDE", bottomLabel: "ASL", value: $altitudeASL)
+                        CircleGauge(colorFunction: altitudeFunc, minVal: 0.0, maxVal: 400.0, unit: "FT", name: "ALTITUDE", bottomLabel: "AGL", value: $altitudeASL)
                             .padding()
                         Spacer()
                         SpeedCluster(verticalSpeed: $verticalSpeed, horizontalSpeed: $horizontalSpeed, airspeed: $airspeed)
@@ -75,10 +76,21 @@ struct SixPack: View {
                         Compass(heading: $heading)
                             .padding()
                     }
-                }.onChange(of: self.telemetry.msg_id) { oldValue, newValue in
-                    self.beatOnce()
                 }
             }
+        }.onChange(of: self.telemetry) { oldValue, newValue in
+            if self.telemetry.heartbeatID > self.heartbeat_id_old {
+                self.beatOnce()
+                heartbeat_id_old = self.telemetry.heartbeatID
+            }
+            msg_id = self.telemetry.msg_id
+            heading = self.telemetry.heading
+            verticalSpeed = self.telemetry.verticalSpeed
+            horizontalSpeed = self.telemetry.horizontalSpeed
+            airspeed = self.telemetry.airspeed
+            throttle = self.telemetry.throttle
+            altitudeASL = self.telemetry.altitudeASL
+            heartbeatHZ = self.telemetry.heartbeatHZ
         }
     }
     
