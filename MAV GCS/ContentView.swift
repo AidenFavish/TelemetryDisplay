@@ -8,16 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var fetcher = TelemetryFetcher()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            SixPack(telemetry: $fetcher.telemetry)
+                .padding(.horizontal)
         }
-        .padding()
+        .onAppear {
+            fetcher.startFetching(interval: 1.0)
+        }
+        .onDisappear {
+            fetcher.stopFetching()
+        }
     }
+    
 }
+
 
 #Preview {
     ContentView()
