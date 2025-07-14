@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SixPack: View {
     @State var isBeating: Bool = false
-    let telemetry: TelemetryData
+    let telemetry: TelemetryFetcher
+    @Binding var orientation: UIDeviceOrientation
     
     @State var msg_id: Int = -1
     @State var heading: Double = -1.0
@@ -21,76 +22,74 @@ struct SixPack: View {
     @State var heartbeatHZ: Double = -1.0
     @State var throttle: Double = -1.0
     @State var heartbeat_id_old: Int = -1
+    @Binding var bruh: Int
     
     var body: some View {
-        GeometryReader { geometry in
-            let isLandscape = geometry.size.width > geometry.size.height
+        ZStack {
             
-            if isLandscape {
+            if orientation == UIDeviceOrientation.landscapeLeft || orientation == UIDeviceOrientation.landscapeRight {
                 HStack {
                     VStack {
                         CircleGauge(colorFunction: altitudeFunc, minVal: 0.0, maxVal: 400.0, unit: "FT", name: "ALTITUDE", bottomLabel: "AGL", value: $altitudeASL)
-                            .padding()
+                            .frame(width: 225, height: 225)
                         Spacer()
                         SpeedCluster(verticalSpeed: $verticalSpeed, horizontalSpeed: $horizontalSpeed, airspeed: $airspeed)
-                            .padding()
+                            .frame(width: 225, height: 225)
                         Spacer()
                         CircleGauge(colorFunction: throttleFunc, minVal: 0.0, maxVal: 100.0, unit: "%", name: "THROTTLE", bottomLabel: "", value: $throttle)
-                            .padding()
+                            .frame(width: 225, height: 225)
                         
                     }
                     VStack {
                         Circle()
                             .foregroundStyle(.gaugeBack)
                             .frame(width: 225, height: 225)
-                            .padding()
                         Spacer()
                         Heartbeat(isBeating: $isBeating, hz: $heartbeatHZ)
-                            .padding()
+                            .frame(width: 225, height: 225)
                         Spacer()
                         Compass(heading: $heading)
-                            .padding()
+                            .frame(width: 225, height: 225)
                     }
                 }
             } else {
                 VStack {
                     HStack {
                         CircleGauge(colorFunction: altitudeFunc, minVal: 0.0, maxVal: 400.0, unit: "FT", name: "ALTITUDE", bottomLabel: "ASL", value: $altitudeASL)
-                            .padding()
+                            .frame(width: 225, height: 225)
                         Spacer()
                         SpeedCluster(verticalSpeed: $verticalSpeed, horizontalSpeed: $horizontalSpeed, airspeed: $airspeed)
-                            .padding()
+                            .frame(width: 225, height: 225)
                         Spacer()
                         CircleGauge(colorFunction: throttleFunc, minVal: 0.0, maxVal: 100.0, unit: "%", name: "THROTTLE", bottomLabel: "", value: $throttle)
-                            .padding()
+                            .frame(width: 225, height: 225)
                     }
                     HStack {
                         Circle()
                             .foregroundStyle(.gaugeBack)
                             .frame(width: 225, height: 225)
-                            .padding()
                         Spacer()
                         Heartbeat(isBeating: $isBeating, hz: $heartbeatHZ)
-                            .padding()
+                            .frame(width: 225, height: 225)
                         Spacer()
                         Compass(heading: $heading)
-                            .padding()
+                            .frame(width: 225, height: 225)
                     }
                 }
             }
-        }.onChange(of: self.telemetry) { oldValue, newValue in
-            if self.telemetry.heartbeatID > self.heartbeat_id_old {
+        }.onChange(of: bruh) { oldValue, newValue in
+            if self.telemetry.telemetry.heartbeatID > self.heartbeat_id_old {
                 self.beatOnce()
-                heartbeat_id_old = self.telemetry.heartbeatID
+                heartbeat_id_old = self.telemetry.telemetry.heartbeatID
             }
-            msg_id = self.telemetry.msg_id
-            heading = self.telemetry.heading
-            verticalSpeed = self.telemetry.verticalSpeed
-            horizontalSpeed = self.telemetry.horizontalSpeed
-            airspeed = self.telemetry.airspeed
-            throttle = self.telemetry.throttle
-            altitudeASL = self.telemetry.altitudeASL
-            heartbeatHZ = self.telemetry.heartbeatHZ
+            msg_id = self.telemetry.telemetry.msg_id
+            heading = self.telemetry.telemetry.heading
+            verticalSpeed = self.telemetry.telemetry.verticalSpeed
+            horizontalSpeed = self.telemetry.telemetry.horizontalSpeed
+            airspeed = self.telemetry.telemetry.airspeed
+            throttle = self.telemetry.telemetry.throttle
+            altitudeASL = self.telemetry.telemetry.altitudeASL
+            heartbeatHZ = self.telemetry.telemetry.heartbeatHZ
         }
     }
     

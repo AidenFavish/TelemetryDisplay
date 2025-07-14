@@ -58,7 +58,7 @@ struct CircleGauge: View {
                 .font(.caption)
                 .offset(CGSize(width: 0.0, height: -65.0))
             
-        }
+        }.frame(width: 225, height: 225)
     }
     
     private func generate_segments(segments: Int) -> [NotchSegment] {

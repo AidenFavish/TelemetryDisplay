@@ -19,7 +19,7 @@ struct SpeedCluster: View {
             VStack {
                 HStack {
                     Spacer()
-                    CurveGauge(low_color: Color.gray, high_color: Color.green, min_value: 0, max_value: 25, units: "mph", name: "VERTICAL", image: "arrow.up.and.down", value: $verticalSpeed)
+                    CurveGauge(low_color: Color.gray, high_color: Color.green, min_value: -8, max_value: 8, units: "mph", name: "VERTICAL", image: "arrow.up.and.down", value: $verticalSpeed)
                         .frame(width: 200.0, height: 120.0)
                         .scaleEffect(0.5)
                         .frame(width: 95.0, height: 40.0)
@@ -31,7 +31,7 @@ struct SpeedCluster: View {
                     
                     Spacer()
                 }.frame(width:200)
-                CurveGauge(low_color: Color.gray, high_color: Color.green, min_value: 0, max_value: 25, units: "mph", name: "AIRSPEED", image: "gauge.with.needle", value: $airspeed)
+                CurveGauge(low_color: Color.gray, high_color: Color.green, min_value: 0, max_value: 25, units: "mph", name: "AIRSPEED", image: "", value: $airspeed)
                     .frame(width: 200, height: 120)
             }.frame(width: 200, height: 200)
         }

@@ -18,6 +18,7 @@ struct Compass: View {
                 .resizable(resizingMode: .stretch)
                 .frame(width: 200, height: 200)
                 .rotationEffect(.degrees(-heading))
+                .animation(.easeInOut(duration: 0.25), value: true)
             Image(systemName: "airplane")
                 .foregroundStyle(.white)
                 .font(.custom("big", size: 35))
@@ -29,5 +30,6 @@ struct Compass: View {
                 .offset(CGSize(width: 0.0, height: 35.0))
             
         }
+        .frame(width: 225, height: 225)
     }
 }

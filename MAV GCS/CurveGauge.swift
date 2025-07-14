@@ -32,7 +32,7 @@ struct CurveGauge: View {
                     .offset(x: -65.0, y: 10.0)
                 Text(String(Int(max_value)))
                     .offset(x: 65.0, y: 10.0)
-                Text(String(Int((max_value - min_value) / 2.0)))
+                Text(String(Int((max_value + min_value) / 2.0)))
                     .offset(x: 0.0, y: -25.0)
                 VStack {
                     Spacer()
@@ -41,9 +41,15 @@ struct CurveGauge: View {
                         .bold()
                         .offset(x: 0, y: 7.0)
                     Text(units)
-                    Label(name, systemImage: image)
-                        .font(.title2)
-                        .bold()
+                    if image == "" {
+                        Text(name)
+                            .font(.title2)
+                            .bold()
+                    } else {
+                        Label(name, systemImage: image)
+                            .font(.title2)
+                            .bold()
+                    }
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -58,7 +64,9 @@ struct CurveGauge: View {
         var the_color = low_color
         for i in (0...segments-1) {
             angle = max_angle + Double(i) * angleDiff
-            if (Double(i) + 1.0) / Double(segments) < (value - min_value) / (max_value - min_value) {
+            if min_value < 0.0 && ((value <= 0.0 && (Double(i) + 1.0) / Double(segments) >= (value - min_value) / (max_value - min_value) && (Double(i) + 1.0) / Double(segments) <= 0.5) || (value >= 0.0 && (Double(i) + 1.0) / Double(segments) <= (value - min_value) / (max_value - min_value) && (Double(i) + 1.0) / Double(segments) >= 0.5)) {
+                the_color = high_color
+            } else if min_value >= 0.0 && (Double(i) + 1.0) / Double(segments) < (value - min_value) / (max_value - min_value) {
                 the_color = high_color
             } else {
                 the_color = low_color
