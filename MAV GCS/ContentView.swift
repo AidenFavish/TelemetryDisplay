@@ -29,6 +29,7 @@ struct ContentView: View {
     @State var estop: Bool = false
     @State var latitude: Double = 0.0
     @State var longitude: Double = 0.0
+    @State var status_text: String = ""
 
     var body: some View {
         GeometryReader { geometry in
@@ -45,7 +46,7 @@ struct ContentView: View {
                                     RoundedRectangle(cornerRadius: 25)
                                         .fill(.gaugeBack)
                                     ScrollView {
-                                        Text("hello\nworld\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20")
+                                        Text(status_text)
                                             .font(.caption)
                                             .padding()
                                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -75,7 +76,7 @@ struct ContentView: View {
                                     .fill(.gaugeBack)
                                 
                                 ScrollView {
-                                    Text("hello\nworld\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20")
+                                    Text(status_text)
                                         .padding()
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                 }.clipShape(RoundedRectangle(cornerRadius: 25))
@@ -118,6 +119,7 @@ struct ContentView: View {
             estop = fetcher.telemetry.estop
             latitude = fetcher.telemetry.lat
             longitude = fetcher.telemetry.lon
+            status_text += fetcher.telemetry.msg
             bruh += 1
             drone_location = CLLocationCoordinate2D(latitude: fetcher.telemetry.lat, longitude: fetcher.telemetry.lon)
 //            device_location = MKCoordinateRegion(

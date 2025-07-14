@@ -22,6 +22,8 @@ struct SixPack: View {
     @State var heartbeatHZ: Double = -1.0
     @State var throttle: Double = -1.0
     @State var heartbeat_id_old: Int = -1
+    @State var pitch: Double = 0.0
+    @State var roll: Double = 0.0
     @Binding var bruh: Int
     
     var body: some View {
@@ -41,8 +43,7 @@ struct SixPack: View {
                         
                     }
                     VStack {
-                        Circle()
-                            .foregroundStyle(.gaugeBack)
+                        AttitudeIndicator(pitch: $pitch, roll: $roll)
                             .frame(width: 225, height: 225)
                         Spacer()
                         Heartbeat(isBeating: $isBeating, hz: $heartbeatHZ)
@@ -65,8 +66,7 @@ struct SixPack: View {
                             .frame(width: 225, height: 225)
                     }
                     HStack {
-                        Circle()
-                            .foregroundStyle(.gaugeBack)
+                        AttitudeIndicator(pitch: $pitch, roll: $roll)
                             .frame(width: 225, height: 225)
                         Spacer()
                         Heartbeat(isBeating: $isBeating, hz: $heartbeatHZ)
@@ -90,6 +90,8 @@ struct SixPack: View {
             throttle = self.telemetry.telemetry.throttle
             altitudeASL = self.telemetry.telemetry.altitudeASL
             heartbeatHZ = self.telemetry.telemetry.heartbeatHZ
+            pitch = -self.telemetry.telemetry.pitch
+            roll = self.telemetry.telemetry.roll
         }
     }
     

@@ -44,10 +44,13 @@ struct TelemetryData: Codable, Equatable {
     
     let lat: Double
     let lon: Double
+    
+    let roll: Double
+    let pitch: Double
 }
 
 class TelemetryFetcher: ObservableObject {
-    @Published var telemetry: TelemetryData = TelemetryData(msg_id: 0, heading: 0, airspeed: 0, verticalSpeed: 0, horizontalSpeed: 0, altitudeASL: 0, heartbeatID: 0, heartbeatHZ: 0, throttle: 0, voltages: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], voltage: 0.0, current: 0.0, power: 0.0, soc: 0.0, time_left: "00:00", wh_left: 0.0, sats: 0, gps_fix: "UNKNOWN", armed: false, estop: false, mode: "UNKNOWN", msg: "", lat: 0.0, lon: 0.0)
+    @Published var telemetry: TelemetryData = TelemetryData(msg_id: 0, heading: 0, airspeed: 0, verticalSpeed: 0, horizontalSpeed: 0, altitudeASL: 0, heartbeatID: 0, heartbeatHZ: 0, throttle: 0, voltages: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], voltage: 0.0, current: 0.0, power: 0.0, soc: 0.0, time_left: "00:00", wh_left: 0.0, sats: 0, gps_fix: "UNKNOWN", armed: false, estop: false, mode: "UNKNOWN", msg: "", lat: 0.0, lon: 0.0, roll: 0.0, pitch: 0.0)
     
     private var timer: Timer?
 
